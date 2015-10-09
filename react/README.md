@@ -15,6 +15,8 @@
   1. [Tags](#tags)
   1. [Methods](#methods)
   1. [Ordering](#ordering)
+  1. [PropTypes](#proptypes)
+  1. [React libraries and components](#react-libraries-and-components)
 
 ## Basic Rules
 
@@ -329,7 +331,7 @@
   1. *Optional render methods* like renderNavigation() or renderProfilePicture()
   1. render
 
-#### Use [propTypes](http://facebook.github.io/react/docs/reusable-components.html).
+## [PropTypes](http://facebook.github.io/react/docs/reusable-components.html)
 
 React Components should always have complete propTypes.  Every
 attribute of this.props should have a corresponding entry in
@@ -354,14 +356,8 @@ As an exception, if passing data through to a child component, and you
 can't use `<child-class>.propTypes.<prop-name>` for some reason, you
 can use `React.PropType.any`.
 
-#### *Never* store state in the DOM.
-
-Do not use `data-` attributes or classes.  All information
-should be stored in Javascript, either in the React component itself,
-or in a React store if using a framework such as Redux.
-
 ----------------------------------
-### React libraries and components
+## React libraries and components
 
 #### Minimize use of jQuery.
 
