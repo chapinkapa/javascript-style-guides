@@ -26,8 +26,7 @@
 
   - Use class extends React.Component unless you have a very good reason to use mixins.
 
-    ```
-    javascript
+    ```jsx
     // bad
     const Listing = React.createClass({
     render() {
@@ -80,9 +79,9 @@
     
     Example:
     
-        ```jsx
-        <Component onClick={this.handleClick} onLaunchMissiles={this.handleLaunchMissiles} />
-        ```
+    ```jsx
+    <Component onClick={this.handleClick} onLaunchMissiles={this.handleLaunchMissiles} />
+    ```
     
     ##### Name handlers in props `onEventName`.
     
@@ -139,19 +138,16 @@
 ## Quotes
   - Always use double quotes (`"`) for JSX attributes, but single quotes for all other JS.
 
-  > Why? JSX attributes [can't contain escaped quotes](http://eslint.org/docs/rules/jsx-quotes), so double quotes make conjunctions like `"don't"` easier to type.
-  > Regular HTML attributes also typically use double quotes instead of single, so JSX attributes mirror this convention.
-
     ```javascript
     // bad
     <Foo bar='bar' />
-
+    
     // good
     <Foo bar="bar" />
-
+    
     // bad
     <Foo style={{ left: "20px" }} />
-
+    
     // good
     <Foo style={{ left: '20px' }} />
     ```
