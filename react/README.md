@@ -26,33 +26,34 @@
 
   - Use class extends React.Component unless you have a very good reason to use mixins.
 
-  ```javascript
-  // bad
-  const Listing = React.createClass({
+    ```
+    javascript
+    // bad
+    const Listing = React.createClass({
     render() {
       return <div />;
     }
-  });
-  
-  // good
-  class Listing extends React.Component {
+    });
+    
+    // good
+    class Listing extends React.Component {
     render() {
       return <div />;
     }
-  }
-  ```
+    }
+    ```
 
 ## Naming
 
   - **Extensions**: Use `.jsx` extension for React components.
-  - **Filename**: Use PascalCase for filenames. E.g., `ReservationCard.jsx`.
+  - **Filename**: Use Kebab Case for filenames. E.g., `reservation-card.jsx`.
   - **Reference Naming**: Use PascalCase for React components and camelCase for their instances:
     ```javascript
     // bad
-    const reservationCard = require('./ReservationCard');
+    const reservationCard = require('./reservation-card.jsx');
 
     // good
-    const ReservationCard = require('./ReservationCard');
+    const ReservationCard = require('./reservation-card.jsx');
 
     // bad
     const ReservationItem = <ReservationCard />;
@@ -61,18 +62,38 @@
     const reservationItem = <ReservationCard />;
     ```
 
-    **Component Naming**: Use the filename as the component name. For example, `ReservationCard.jsx` should have a reference name of `ReservationCard`. However, for root components of a directory, use `index.jsx` as the filename and use the directory name as the component name:
+    **Component Naming**: Use the filename as the component name. For example, `reservation-card.jsx` should have a reference name of `ReservationCard`. However, for root components of a directory, use `index.jsx` as the filename and use the directory name as the component name:
     ```javascript
     // bad
-    const Footer = require('./Footer/Footer.jsx')
+    const Footer = require('./footer/footer.jsx')
 
     // bad
-    const Footer = require('./Footer/index.jsx')
+    const Footer = require('./footer/index.jsx')
 
     // good
-    const Footer = require('./Footer')
+    const Footer = require('./footer.jsx')
     ```
 
+    ### Event handlers
+    
+    ##### Name handlers `handleEventName`.
+    
+    Example:
+    
+        ```jsx
+        <Component onClick={this.handleClick} onLaunchMissiles={this.handleLaunchMissiles} />
+        ```
+    
+    ##### Name handlers in props `onEventName`.
+    
+    This is consistent with React's event naming: `onClick`, `onDrag`,
+    `onChange`, etc.
+    
+    Example:
+    
+    ```jsx
+    <Component onLaunchMissiles={this.handleLaunchMissiles} />
+    ```
 
 ## Declaration
   - Do not use displayName for naming components. Instead, name the component by reference.
@@ -219,11 +240,11 @@
     ```
 
 ## Methods
-  - Do not use underscore prefix for internal methods of a React component.
+  - Use underscore prefix for "private" methods of a React component.
     ```javascript
     // bad
     React.createClass({
-      _onClickSubmit() {
+      _somePrivateMethod() {
         // do stuff
       }
 
@@ -232,7 +253,7 @@
 
     // good
     class extends React.Component {
-      onClickSubmit() {
+      somePrivateMethod() {
         // do stuff
       }
 
@@ -254,39 +275,39 @@
   1. componentWillUpdate
   1. componentDidUpdate
   1. componentWillUnmount
-  1. *clickHandlers or eventHandlers* like onClickSubmit() or onChangeDescription()
+  1. *clickHandlers or eventHandlers* like handleSubmit() or handleDescriptionChange()
   1. *getter methods for render* like getSelectReason() or getFooterContent()
   1. *Optional render methods* like renderNavigation() or renderProfilePicture()
   1. render
 
   - How to define propTypes, defaultProps, contextTypes, etc...  
 
-  ```javascript
-  import React, { Component, PropTypes } from 'react';
-  
-  const propTypes = {
-    id: PropTypes.number.isRequired,
-    url: PropTypes.string.isRequired,
-    text: PropTypes.string,
-  };
-  
-  const defaultProps = {
-    text: 'Hello World',
-  };
-  
-  export default class Link extends Component {
-    static methodsAreOk() {
-      return true;
-    }
-  
-    render() {
-      return <a href={this.props.url} data-id={this.props.id}>{this.props.text}</a>
-    }
-  }
-  
-  Link.propTypes = propTypes;
-  Link.defaultProps = defaultProps;
-  ```
+      ```javascript
+      import React, { Component, PropTypes } from 'react';
+      
+      const propTypes = {
+        id: PropTypes.number.isRequired,
+        url: PropTypes.string.isRequired,
+        text: PropTypes.string,
+      };
+      
+      const defaultProps = {
+        text: 'Hello World',
+      };
+      
+      export default class Link extends Component {
+        static methodsAreOk() {
+          return true;
+        }
+      
+        render() {
+          return <a href={this.props.url} data-id={this.props.id}>{this.props.text}</a>
+        }
+      }
+      
+      Link.propTypes = propTypes;
+      Link.defaultProps = defaultProps;
+      ```
 
   - Ordering for React.createClass:
 
@@ -307,9 +328,51 @@
   1. componentWillUpdate
   1. componentDidUpdate
   1. componentWillUnmount
-  1. *clickHandlers or eventHandlers* like onClickSubmit() or onChangeDescription()
+  1. *clickHandlers or eventHandlers* like handleSubmit() or handleDescriptionChange()
   1. *getter methods for render* like getSelectReason() or getFooterContent()
   1. *Optional render methods* like renderNavigation() or renderProfilePicture()
   1. render
+
+#### Use [propTypes](http://facebook.github.io/react/docs/reusable-components.html).
+
+React Components should always have complete propTypes.  Every
+attribute of this.props should have a corresponding entry in
+propTypes.  This documents that props need to be passed to a model.
+([example](https://github.com/Khan/webapp/blob/32aa862769d4e93c477dc0ee0388816056252c4a/javascript/search-package/search-results-list.jsx#L14))
+
+If you as passing data through to a child component, you can use
+the prop-type `<child-class>.propTypes.<prop-name>`.
+
+Avoid these non-descriptive prop-types:
+   * `React.PropTypes.any`
+   * `React.PropTypes.array`
+   * `React.PropTypes.object`
+
+Instead, use 
+   * `React.PropTypes.arrayOf`
+   * `React.PropTypes.objectOf`
+   * `React.PropTypes.instanceOf`
+   * `React.PropTypes.shape`
+
+As an exception, if passing data through to a child component, and you
+can't use `<child-class>.propTypes.<prop-name>` for some reason, you
+can use `React.PropType.any`.
+
+#### *Never* store state in the DOM.
+
+Do not use `data-` attributes or classes.  All information
+should be stored in Javascript, either in the React component itself,
+or in a React store if using a framework such as Redux.
+
+----------------------------------
+### React libraries and components
+
+#### Minimize use of jQuery.
+
+*Never* use jQuery for DOM manipulation.
+
+Try to avoid using jQuery plugins.  When necessary, wrap the jQuery
+plugin with a React component so you only have to touch the jQuery
+once.
 
 **[⬆ back to top](#table-of-contents)**
